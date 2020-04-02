@@ -9,7 +9,7 @@ import (
 func MapHandler(storyline map[string]Arc, fallback http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// given r.URL.path, write templateHTML(map[r.URL.path] Arc)
-		if arc, match := storyline[r.URL.Path]; match {
+		if arc, match := storyline[r.URL.Path[1:]]; match {
 			TemplateHTML(arc).Execute(w, arc)
 		} else {
 			fallback.ServeHTTP(w, r)

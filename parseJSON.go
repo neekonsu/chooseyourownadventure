@@ -58,14 +58,25 @@ func MakeMap(data []byte) map[string]Arc {
 func PrintMap(newMap map[string]Arc) {
 	for k, v := range newMap {
 		fmt.Println(k, ": ")
-		fmt.Println("\tTitle: ", v.Title)
-		fmt.Println("\tStory: ")
-		for _, e := range v.Story {
-			fmt.Println("\t\t", e)
-		}
-		fmt.Println("\tOptions: ")
-		for _, e := range v.Options {
-			fmt.Println("\t\t", e)
+		for _, line := range ListArc(v) {
+			fmt.Println("\t", line)
 		}
 	}
+}
+
+// ListArc -> pretty-print individual arc
+func ListArc(arc Arc) []string {
+	output := []string{
+		"Title: " + arc.Title,
+		"Story: ",
+	}
+	for _, e := range arc.Story {
+		output = append(output, "\t"+e)
+	}
+	output = append(output, "Options: ")
+	for _, e := range arc.Options {
+		output = append(output, "\t"+e.Text)
+		output = append(output, "\t"+e.ArcID)
+	}
+	return output
 }

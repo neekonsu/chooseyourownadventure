@@ -43,6 +43,23 @@ func main() {
 				"arc": "the name o2f the story arc to navigate to. This will match the story-arc key at the very root of the JSON document"
 			}
 		]
+	},
+	"intro": {
+		"title": "An Introoooo for that story arc. Think of it like a chapter title.",
+		"story": [
+			"A series of paragraphs, each represented as a string in a slice.",
+			"This is a new paragraph in this particular story arc."
+		],
+		"options": [
+			{
+				"text": "the text to render for this option. eg 'venture down the dark passage'",
+				"arc": "story-arc"
+			},
+			{
+				"text": "the text to render for this option. eg 'venture down the dark passage'",
+				"arc": "story-arc2"
+			}
+		]
 	}
 }`)
 	newMap := chooseyourownadventure.MakeMap(JSON)
@@ -55,7 +72,7 @@ func main() {
 func defaultMux() *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/intro", http.StatusOK)
+		http.Redirect(w, r, "/intro", http.StatusFound)
 	})
 	return mux
 }
