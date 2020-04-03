@@ -1,24 +1,32 @@
 package chooseyourownadventure
 
 import (
+	"log"
 	"net/http"
 	"text/template"
 )
 
-// MapHandler -> take map[string]Arc and handle requests to #/(key) by returning templated HTML for Arc(key)
-func MapHandler(storyline map[string]Arc, fallback http.Handler) http.HandlerFunc {
+// MapHandler -> take Story and handle requests to #/(key) by returning templated HTML for Chapter(key)
+func MapHandler(storyline Story, templateFilename string, fallback http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// given r.URL.path, write templateHTML(map[r.URL.path] Arc)
-		if arc, match := storyline[r.URL.Path[1:]]; match {
-			TemplateHTML(arc).Execute(w, arc)
+		// given r.URL.path, write templateHTML(map[r.URL.path] Chapter)
+		if chapter, match := storyline[r.URL.Path[1:]]; match {
+			TemplateHTML(chapter, templateFilename).Execute(w, chapter)
 		} else {
 			fallback.ServeHTTP(w, r)
 		}
 	}
 }
 
-// TemplateHTML -> return HTML template from single Arc struct
-func TemplateHTML(arc Arc) *template.Template {
-	tmpl := template.Must(template.ParseFiles("template.html"))
+// TemplateHTML -> return HTML template from single Chapter struct
+func TemplateHTML(chapter Chapter, templateFilename string) *template.Template {
+	tmpl := template.Must(template.ParseFiles(templateFilename))
 	return tmpl
+}
+
+// Check -> generic error handler
+func Check(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
 }

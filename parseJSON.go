@@ -4,32 +4,21 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 )
 
-// Option represents a single element of the "options" array to be expected from the JSON file
-type Option struct {
-	Text string `json:"text"`
-	Arc  string `json:"arc"`
-}
-
-// Chapter represents a single story Arc/Chapter
-type Chapter struct {
-	Title   string   `json:"title"`
-	Story   []string `json:"story"`
-	Options []Option `json:"options"`
-}
-
-// MakeMap -> parse JSON file and return map[string]Chapter of ChapterName(key) -> ChapterContents(value)
-func MakeMap(data []byte) map[string]Chapter {
-	output := make(map[string]Chapter)
-	if err := json.Unmarshal(data, &output); err != nil {
+// MakeStory -> parse JSON file and return map[string]Chapter of ChapterName(key) -> ChapterContents(value)
+func MakeStory(r *os.File) Story {
+	output := make(Story)
+	decoder := json.NewDecoder(r)
+	if err := decoder.Decode(&output); err != nil {
 		log.Fatal(err)
 	}
 	return output
 }
 
-// PrintMap -> takes map[string]Chapter and returns pretty-printed version of that map
-func PrintMap(newMap map[string]Chapter) {
+// PrintMap -> takes Story and returns pretty-printed version of that map
+func PrintMap(newMap Story) {
 	for k, v := range newMap {
 		fmt.Println(k, ": ")
 		for _, line := range ListChapter(v) {

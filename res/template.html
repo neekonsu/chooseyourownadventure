@@ -1,12 +1,12 @@
 <h1>{{.Title}}</h1>
 <ul>
     {{range .Story}}
-        <div>{{.}}</div>
+        <p>{{.}}</p>
     {{end}}
 </ul>
 <ul>
     {{range .Options}}
         <div>{{.Text}}</div>
-        <a href={{.ArcID}}>{{.ArcID}}</a>
+        <a href={{.Arc}}>{{.Arc}}</a>
     {{end}}
 </ul>
